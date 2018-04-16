@@ -1,10 +1,10 @@
 package main
 
 import (
-"fmt"
-"reflect"
-"runtime"
-"math"
+	"fmt"
+	"reflect"
+	"runtime"
+	"math"
 )
 
 func main() {
@@ -28,6 +28,8 @@ func main() {
 	fmt.Println(apply(func(a int, b int) int {
 		return int(math.Pow(float64(a), float64(b)))
 	}, 3, 4))
+
+	fmt.Println(sumArgs(3, 4, 5, 6))
 }
 
 func pow(a, b int) int {
@@ -53,7 +55,6 @@ func eval(a, b int, op string) (int, error) {
 
 func div(a, b int) (q, r int) {
 	return a / b, a % b
-
 	// do not recommend here
 	//q, r = a/b, a%b
 	//return
@@ -64,4 +65,12 @@ func apply(op func(int, int) int, a, b int) int {
 	opName := runtime.FuncForPC(p).Name()
 	fmt.Printf("calling function :%s with args"+"(%d,%d)\n", opName, a, b)
 	return op(a, b)
+}
+
+func sumArgs(numbers ...int) int {
+	s := 0
+	for i := range numbers {
+		s += numbers[i]
+	}
+	return s
 }

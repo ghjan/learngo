@@ -5,6 +5,8 @@ import (
 	"math"
 	"math/cmplx"
 	"io/ioutil"
+	"io"
+	"os"
 )
 
 func main() {
@@ -17,6 +19,7 @@ func main() {
 	enums()
 	const filename = "abc.txt"
 	printFile(filename)
+
 	fmt.Println(bounded(3))
 
 	fmt.Println(grade(0))
@@ -88,6 +91,7 @@ func printFile(filename string) {
 
 }
 
+
 func grade(score int) string {
 	g := ""
 	switch {
@@ -104,4 +108,3 @@ func grade(score int) string {
 	}
 	return g
 }
-

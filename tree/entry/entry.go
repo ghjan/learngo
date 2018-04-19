@@ -30,8 +30,9 @@ func main() {
 	root.Right.Left = new(tree.Node)
 	root.Left.Right = tree.CreateNode(2)
 
+	fmt.Println("\n- testNode tranverse 二叉树中序遍历----")
 	testNode(root)
-	fmt.Println("\n- myTreeNode postOrder----")
+	fmt.Println("\n- myTreeNode postOrder 二叉树后序遍历----")
 	mynode := myTreeNode{&root}
 	mynode.postOrder()
 	fmt.Println("\n- testSparser----")
@@ -76,6 +77,13 @@ func testNode(root tree.Node) {
 	pRoot.SetValue(3)
 	pRoot.Right.Left.SetValue(4)
 	pRoot.Traverse()
+
+	nodeCount := 0
+	fmt.Println("\n-TraverseFunc， 自定义一个操作不再是print而已---")
+	root.TraverseFunc(func(node *tree.Node) {
+		nodeCount++
+	})
+	fmt.Println("nodeCount:", nodeCount)
 }
 
 func testSparse() {

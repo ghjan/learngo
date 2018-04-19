@@ -1,6 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"io"
+
+	"github.com/ghjan/learngo/functional/fib"
+	"github.com/ghjan/learngo/functional/typedef"
+)
 
 //闭包 adder函数返回了一个闭包（不仅仅是一个函数，闭包还包括一个环境）
 func adder() func(int) int {
@@ -12,9 +19,15 @@ func adder() func(int) int {
 }
 
 func main() {
+	//fmt.Println("----closure1----")
 	//closure1()
-
+	fmt.Println("----closure2----")
 	closure2()
+	fmt.Println("----testFib----")
+	testFib()
+	fmt.Println("----testFibSmallBuf----")
+	testFibSmallBuf()
+
 }
 
 func closure2() {
@@ -38,5 +51,31 @@ type iAdder func(int) (int, iAdder)
 func adder2(base int) iAdder {
 	return func(v int) (int, iAdder) {
 		return base + v, adder2(base + v)
+	}
+}
+
+func testFib() {
+	f := fib.Fibonacci()
+	PrintFileContents(f)
+}
+
+func testFibSmallBuf() {
+	var f = fib.Fibonacci()
+	p := make([]byte, 2)
+	//外面缓冲区开的很小p is too small, so we use typedef.intGen instead of typedef.intGen
+	r := typedef.BufIntGen{G: f}
+	for {
+		n, err := r.Read(p)
+		if err != nil {
+			break
+		}
+		fmt.Printf("%s", p[:n])
+	}
+}
+
+func PrintFileContents(reader io.Reader) {
+	scanner := bufio.NewScanner(reader)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
 	}
 }

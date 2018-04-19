@@ -11,7 +11,7 @@ import (
 
 //闭包 adder函数返回了一个闭包（不仅仅是一个函数，闭包还包括一个环境）
 func adder() func(int) int {
-	sum := 0 //环境中的自由变量
+	sum := 0                 //环境中的自由变量
 	return func(v int) int { //局部变量
 		sum += v
 		return sum
@@ -19,8 +19,8 @@ func adder() func(int) int {
 }
 
 func main() {
-	//fmt.Println("----closure1----")
-	//closure1()
+	fmt.Println("----closure1----")
+	closure1()
 	fmt.Println("----closure2----")
 	closure2()
 	fmt.Println("----testFib----")

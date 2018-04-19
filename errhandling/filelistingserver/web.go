@@ -3,7 +3,6 @@ package main
 import (
 	"net/http"
 	"os"
-
 	"github.com/ghjan/learngo/errhandling/filelistingserver/filelisting"
 	"log"
 )
@@ -15,6 +14,7 @@ func init() {
 
 type appHandler func(writer http.ResponseWriter, request *http.Request) error
 
+//统一的出错处理
 func errWrapper(handler appHandler) func(http.ResponseWriter, *http.Request) {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		err := handler(writer, request)
@@ -38,9 +38,8 @@ func errWrapper(handler appHandler) func(http.ResponseWriter, *http.Request) {
 func main() {
 	http.HandleFunc("/list/", errWrapper(filelisting.HandleFileList))
 
-	err := http.ListenAndServe(":8888", nil)
+	err := http.ListenAndServe(":8088", nil)
 	if err != nil {
 		panic(err)
 	}
-
 }

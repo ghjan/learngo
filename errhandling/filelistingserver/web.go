@@ -39,6 +39,8 @@ func errWrapper(handler appHandler) func(http.ResponseWriter, *http.Request) {
 					http.StatusBadRequest)
 				return
 			}
+
+			//system error
 			code := http.StatusOK
 			switch {
 			case os.IsNotExist(err):

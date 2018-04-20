@@ -3,3 +3,7 @@
 .vscode
 fib*.txt
 abc*.txt
+*.out
+*.exe
+debug
+debug.test

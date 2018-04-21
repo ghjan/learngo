@@ -13,10 +13,9 @@ type atomicInt struct {
 
 func (a *atomicInt) increment() {
 	fmt.Println("safe increment")
-	func() {
+	func() { //一块代码区里面 进行保护
 		a.lock.Lock()
 		defer a.lock.Unlock()
-
 		a.value++
 	}()
 }
@@ -24,7 +23,6 @@ func (a *atomicInt) increment() {
 func (a *atomicInt) get() int {
 	a.lock.Lock()
 	defer a.lock.Unlock()
-
 	return a.value
 }
 

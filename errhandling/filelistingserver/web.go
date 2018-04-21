@@ -4,6 +4,7 @@ import (
 	"github.com/ghjan/learngo/errhandling/filelistingserver/filelisting"
 	"log"
 	"net/http"
+	_ "net/http/pprof"
 	"os"
 )
 

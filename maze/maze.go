@@ -9,10 +9,10 @@ type point struct {
 	i, j int
 }
 
-func readMaze(filename string) [][]int {
+func readMaze(filename string) ([][]int, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	var row, col int
 	fmt.Fscanf(file, "%d %d", &row, &col)
@@ -23,7 +23,7 @@ func readMaze(filename string) [][]int {
 			fmt.Fscanf(file, "%d", &maze[i][j])
 		}
 	}
-	return maze
+	return maze, nil
 }
 
 var dirs = [4]point{
@@ -58,40 +58,47 @@ func walk(maze [][]int, start, end point) [][]int {
 		}
 		for _, dir := range dirs {
 			next := cur.add(dir)
-			//maze at next is 0
-			//and steps at next is 0
-			//and next !=start
+
 			val, ok := next.at(maze)
-			if !ok || val == 1 { //越界或者撞墙
-				continue
-			}
-			val, ok = next.at(steps)
-			if !ok || val != 0 { //越界或者已经走过
+			if !ok || val == 1 {
 				continue
 			}
 
-			if next == start { //回到原点
+			val, ok = next.at(steps)
+			if !ok || val != 0 {
+				continue
+			}
+
+			if next == start {
 				continue
 			}
 			curSteps, _ := cur.at(steps)
 			steps[next.i][next.j] = curSteps + 1
 			Q = append(Q, next)
 		}
-
 	}
+
 	return steps
 }
 
 func main() {
-	maze := readMaze("maze/maze.in")
+	maze, err := readMaze("maze/maze.in")
+	if err != nil {
+		maze, err = readMaze("maze.in")
+	}
+	fmt.Println("------printSlice(maze)--")
+	printSlice(maze)
 
 	steps := walk(maze, point{0, 0}, point{len(maze) - 1, len(maze[0]) - 1})
-	for _, row := range steps {
+	fmt.Println("------printSlice(steps)--")
+	printSlice(steps)
+	// TODO: construct path from steps
+}
+func printSlice(slice [][]int) {
+	for _, row := range slice {
 		for _, val := range row {
-			fmt.Printf("%3d ",
-				val)
+			fmt.Printf("%3d", val)
 		}
 		fmt.Println()
 	}
-
 }

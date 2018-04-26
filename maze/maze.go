@@ -16,6 +16,7 @@ func readMaze(filename string) ([][]int, error) {
 	}
 	var row, col int
 	fmt.Fscanf(file, "%d %d", &row, &col)
+
 	maze := make([][]int, row)
 	for i := range maze {
 		maze[i] = make([]int, col)

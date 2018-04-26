@@ -14,13 +14,14 @@ func ParseCity(contents []byte) engine.ParseResult {
 	results := engine.ParseResult{}
 	for _, m := range matches {
 		results.Items = append(results.Items, "User "+string(m[2]))
+		name := string(m[2])
 		results.Requests = append(results.Requests,
 			engine.Request{
 				Url: string(m[1]),
 				ParseFunc: func(c []byte) engine.ParseResult {
-					return ParseProfile(c, string(m[2]))
+					return ParseProfile(c, name)
 				},
-				})
+			})
 	}
 	fmt.Printf("ParseCity, Matches found: %d\n", len(matches))
 	return results

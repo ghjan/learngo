@@ -4,6 +4,7 @@ import (
 	"github.com/ghjan/learngo/crawer/fetcher"
 	"github.com/ghjan/learngo/crawer/zhenai/parser"
 	"github.com/ghjan/learngo/crawer/engine"
+	"github.com/ghjan/learngo/crawer/scheduler"
 )
 
 const (
@@ -17,11 +18,18 @@ const (
 func main() {
 	//printCityList([]byte(cityText))
 	//testCityList()
-	testEngine()
+	//testSimpleEngine()
+	testConcurentEngine()
 }
 
-func testEngine() {
-	engine.Run(engine.Request{Url: urlCityListPage, ParseFunc: parser.ParseCityList})
+func testConcurentEngine() {
+	eng := engine.ConcurentEngine{Scheduler: &scheduler.SimpleScheduler{}, WorkerCount: 100}
+	eng.Run(engine.Request{Url: urlCityListPage, ParseFunc: parser.ParseCityList})
+}
+
+func testSimpleEngine() {
+	eng := engine.SimpleEngine{}
+	eng.Run(engine.Request{Url: urlCityListPage, ParseFunc: parser.ParseCityList})
 }
 
 func testCityList() {

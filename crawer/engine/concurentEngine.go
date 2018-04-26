@@ -34,7 +34,7 @@ func (e *ConcurentEngine) Run(seeds ...Request) {
 		result := <-out
 		for _, item := range result.Items {
 			itemCount++
-			fmt.Printf("Got item #%d:%v", itemCount, item)
+			fmt.Printf("Got item #%d:%v\n", itemCount, item)
 		}
 		for _, request := range result.Requests {
 			e.Scheduler.Submit(request)

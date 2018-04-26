@@ -13,6 +13,7 @@ const (
 	//	cityText = `<a href="http://www.zhenai.com/zhenghun/aba" class="">阿坝</a>
 	//<a href="http://www.zhenai.com/zhenghun/akesu" class="">阿克苏</a>
 	//`
+	urlShanghaiPage = "http://www.zhenai.com/zhenghun/shanghai"
 )
 
 func main() {
@@ -20,8 +21,14 @@ func main() {
 	//testCityList()
 	//testSimpleEngine()
 	testConcurentEngine()
+	//testShanghai()
 }
 
+func testShanghai() {
+	eng := engine.ConcurentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100}
+	eng.Run(engine.Request{Url: urlShanghaiPage, ParseFunc: parser.ParseCity})
+
+}
 func testConcurentEngine() {
 	eng := engine.ConcurentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100}
 	eng.Run(engine.Request{Url: urlCityListPage, ParseFunc: parser.ParseCityList})

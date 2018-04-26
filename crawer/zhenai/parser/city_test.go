@@ -3,46 +3,30 @@ package parser
 import (
 	"testing"
 
+	//"github.com/ghjan/learngo/crawer/fetcher"
 	"io/ioutil"
-	//"fmt"
 )
 
-//const urlCityPage = "http://www.zhenai.com/zhenghun"
-const userContent = `<li class="clearfix">
-									<div class="guess-photo">
-										<a href="http://album.zhenai.com/u/109816757" target="_blank">
-											<img src="http://photo16.zastatic.com/images/photo/27455/109816757/99718035787672941.png?scrop=1&crop=1&w=100&h=100&cpos=north">
-										</a>
-									</div>
-									<dl class="guess-info">
-										<dt class="guess-name fs16">
-											<a class="exp-user-name" target="_blank"
-												href="http://album.zhenai.com/u/109816757">蝴蝶在飞舞</a>
-										</dt>
-										<dd>
-											<p class="guess-age lh24 fs12 c9f">31岁 162cm</p>
-											<p class="guess-gb fs14 c5e">我是东阳人，喜欢另一半也是东阳或义乌本地人。只要是我喜欢的哪里都好。</p>
-										</dd>
-									</dl>
-								</li>`
+const urlCityUserPage = "http://www.zhenai.com/zhenghun/aba"
 
 func TestParseCity(t *testing.T) {
 
-	//contents, err := fetcher.Fetch(urlCityPage)
-	contents, err := ioutil.ReadFile("profile_test_data.html")
+	//contents, err := fetcher.Fetch(urlCityUserPage)
+	contents, err := ioutil.ReadFile("city_test_data.html")
 	if err != nil {
 		panic(err)
 	}
 	//contents = []byte(userContent)
 	//fmt.Printf("contents:%s", contents)
 	result := ParseCity(contents)
-	const resultSize = 2
+	const resultSize = 20
 	expectedUrls := []string{
-		"http://album.zhenai.com/u/109816757",
-		"http://album.zhenai.com/u/101873762",
+		"http://album.zhenai.com/u/108415017",
+		"http://album.zhenai.com/u/1314495053",
+		"http://album.zhenai.com/u/1121586032",
 	}
 	expectedUsers := []string{
-		"User 蝴蝶在飞舞", "User 燕子",
+		"User 惠儿", "User 风中的蒲公英", "User 现实与理想之间",
 	}
 
 	for len(result.Requests) != resultSize {

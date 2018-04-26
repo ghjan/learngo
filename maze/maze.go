@@ -89,7 +89,8 @@ func main() {
 	fmt.Println("------printSlice(maze)--")
 	printSlice(maze)
 
-	steps := walk(maze, point{0, 0}, point{len(maze) - 1, len(maze[0]) - 1})
+	// steps := walk(maze, point{0, 0}, point{len(maze) - 1, len(maze[0]) - 1})
+	steps := walk(maze, point{0, 0}, point{2, 2})
 	fmt.Println("------printSlice(steps)--")
 	printSlice(steps)
 	// TODO: construct path from steps

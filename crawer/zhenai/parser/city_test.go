@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 )
 
-const urlCityUserPage = "http://www.zhenai.com/zhenghun/aba"
+//const urlCityUserPage = "http://www.zhenai.com/zhenghun/aba"
 
 func TestParseCity(t *testing.T) {
 

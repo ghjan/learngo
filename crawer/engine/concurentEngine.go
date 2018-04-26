@@ -1,23 +1,30 @@
 package engine
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type ConcurentEngine struct {
 	Scheduler   Scheduler
 	WorkerCount int
 }
 type Scheduler interface {
+	readyNotify
 	Submit(Request)
-	ConfigureMasterWorkerChan(chan Request)
+	WorkerChan() chan Request
+	Run()
+}
+
+type readyNotify interface {
+	WorkerReady(chan Request)
 }
 
 func (e *ConcurentEngine) Run(seeds ...Request) {
-	in := make(chan Request)
 	out := make(chan ParseResult)
-	e.Scheduler.ConfigureMasterWorkerChan(in)
+	e.Scheduler.Run()
 
 	for i := 0; i < e.WorkerCount; i++ {
-		e.createWorker(in, out)
+		e.createWorker(e.Scheduler.WorkerChan(), out, e.Scheduler)
 	}
 	for _, r := range seeds {
 		e.Scheduler.Submit(r)
@@ -35,9 +42,12 @@ func (e *ConcurentEngine) Run(seeds ...Request) {
 	}
 }
 
-func (e *ConcurentEngine) createWorker(in chan Request, out chan ParseResult) {
+func (e *ConcurentEngine) createWorker(in chan Request, out chan ParseResult, notify readyNotify) {
+	//in := make(chan Request)
 	go func() {
 		for {
+			// tell notify i'm ready
+			notify.WorkerReady(in)
 			request := <-in
 			result, err := worker(request)
 			if err != nil {

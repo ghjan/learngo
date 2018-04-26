@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/ghjan/learngo/crawer/fetcher"
-	"github.com/ghjan/learngo/crawer/zhenai/parser"
 	"github.com/ghjan/learngo/crawer/engine"
+	"github.com/ghjan/learngo/crawer/fetcher"
 	"github.com/ghjan/learngo/crawer/scheduler"
+	"github.com/ghjan/learngo/crawer/zhenai/parser"
 )
 
 const (
@@ -23,7 +23,7 @@ func main() {
 }
 
 func testConcurentEngine() {
-	eng := engine.ConcurentEngine{Scheduler: &scheduler.SimpleScheduler{}, WorkerCount: 100}
+	eng := engine.ConcurentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100}
 	eng.Run(engine.Request{Url: urlCityListPage, ParseFunc: parser.ParseCityList})
 }
 

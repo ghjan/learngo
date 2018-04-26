@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-var rateLimiter = time.Tick(10 * time.Millisecond)
+var rateLimiter = time.Tick(5 * time.Millisecond)
 
 func Fetch(url string) ([]byte, error) {
 	//提交请求

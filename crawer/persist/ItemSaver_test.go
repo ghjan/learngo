@@ -42,7 +42,7 @@ func TestItemSaver(t *testing.T) {
 		panic(err)
 	}
 
-	resp, err := client.Get().Index("dating_profile").Type(expected.Type).Id(expected.Id).Do(context.Background())
+	resp, err := client.Get().Index(index).Type(expected.Type).Id(expected.Id).Do(context.Background())
 	if err != nil {
 		panic(err)
 	}

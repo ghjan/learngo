@@ -8,7 +8,7 @@ import (
 	//"github.com/ghjan/learngo/crawer/engine"
 )
 
-//const urlCityUserPage = "http://www.zhenai.com/zhenghun/aba"
+const urlCityUserPage = "http://www.zhenai.com/zhenghun/aba"
 
 func TestParseCity(t *testing.T) {
 
@@ -19,7 +19,7 @@ func TestParseCity(t *testing.T) {
 	}
 	//contents = []byte(userContent)
 	//fmt.Printf("contents:%s", contents)
-	result := ParseCity(contents)
+	result := ParseCity(contents, urlCityUserPage)
 	const resultSize = 20
 	expectedUrls := []string{
 		"http://album.zhenai.com/u/108415017",

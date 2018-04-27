@@ -10,7 +10,7 @@ import (
 var profileRe = regexp.MustCompile(`<th><a href="(http://album.zhenai.com/u/[0-9]+)"[^>]*>([^<]+)</a></th>`)
 var cityUrlRe = regexp.MustCompile(`href="(http://www.zhenai.com/zhenghun/[^"]+)">[^<]+</a>`)
 
-func ParseCity(contents []byte) engine.ParseResult {
+func ParseCity(contents []byte, url string) engine.ParseResult {
 
 	matches := profileRe.FindAllStringSubmatch(string(contents), -1)
 	result := engine.ParseResult{}
@@ -20,10 +20,8 @@ func ParseCity(contents []byte) engine.ParseResult {
 		name := string(m[2])
 		result.Requests = append(result.Requests,
 			engine.Request{
-				Url: url,
-				ParseFunc: func(c []byte) engine.ParseResult {
-					return ParseProfile(c, name, url)
-				},
+				Url:       url,
+				ParseFunc: ProfileParser(name),
 			})
 	}
 

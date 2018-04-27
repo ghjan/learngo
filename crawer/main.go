@@ -31,7 +31,11 @@ func testShanghai() {
 
 }
 func testConcurentEngine() {
-	eng := engine.ConcurentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100, ItemChan: persist.ItemSaver()}
+	itemChan, err := persist.ItemSaver("dating_profile")
+	if err != nil {
+		panic(err)
+	}
+	eng := engine.ConcurentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100, ItemChan: itemChan}
 	eng.Run(engine.Request{Url: urlCityListPage, ParseFunc: parser.ParseCityList})
 }
 
@@ -45,5 +49,5 @@ func testCityList() {
 	if err != nil {
 		panic(err)
 	}
-	parser.ParseCityList(content)
+	parser.ParseCityList(content, urlCityListPage)
 }

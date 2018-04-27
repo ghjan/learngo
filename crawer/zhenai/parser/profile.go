@@ -77,7 +77,7 @@ func ParseProfile(contents []byte, name string, url string) engine.ParseResult {
 		contents, idUrlRe)
 
 	result := engine.ParseResult{
-		Items: []engine.Item{{Url: url, Type: "Zhenai", Id: id, Payload: profile},},
+		Items: []engine.Item{{Url: url, Type: "Zhenai", Id: id, Payload: profile}},
 	}
 	matches := guessRe.FindAllSubmatch(contents, -1)
 	for _, m := range matches {
@@ -85,10 +85,8 @@ func ParseProfile(contents []byte, name string, url string) engine.ParseResult {
 		url := string(m[1])
 		result.Requests = append(result.Requests,
 			engine.Request{
-				Url: string(m[1]),
-				ParseFunc: func(c []byte) engine.ParseResult {
-					return ParseProfile(c, name, url)
-				},
+				Url:       url,
+				ParseFunc: ProfileParser(name),
 			})
 
 	}
@@ -104,4 +102,10 @@ func extractString(contents []byte, re *regexp.Regexp) string {
 		return ""
 	}
 
+}
+
+func ProfileParser(name string) engine.ParserFunc {
+	return func(c []byte, url string) engine.ParseResult {
+		return ParseProfile(c, name, url)
+	}
 }

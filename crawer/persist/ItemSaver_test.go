@@ -26,17 +26,18 @@ func TestItemSaver(t *testing.T) {
 		Education:  "高中及以下",
 		Car:        "未购车",
 	}
-	// TODO : add Url and Id
 	expected := engine.Item{Id: "108415017", Type: "Zhenai", Payload: profile}
-	err := save(expected)
-	if err != nil {
-		panic(err)
-	}
+	//Must turn off sniff in docker
 	// TODO :Try to start up elastic search
 	// here using docker go client.
 	client, err := elastic.NewClient(
 		elastic.SetURL("http://elastic.davidzhang.xin:9200", "http://localhost:9200"),
 		elastic.SetMaxRetries(10), elastic.SetSniff(false))
+	if err != nil {
+		panic(err)
+	}
+	const index = "datingtest"
+	err = save(client, expected, index)
 	if err != nil {
 		panic(err)
 	}

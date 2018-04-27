@@ -39,6 +39,6 @@ func worker(r Request) (ParseResult, error) {
 		return ParseResult{}, err
 	}
 
-	parseResult := r.ParseFunc(body)
+	parseResult := r.ParseFunc(body, r.Url)
 	return parseResult, nil
 }

@@ -20,8 +20,8 @@ func main() {
 	//printCityList([]byte(cityText))
 	//testCityList()
 	//testSimpleEngine()
-	//testConcurentEngine()
-	testShanghai()
+	testConcurentEngine()
+	//testShanghai()
 }
 
 func testShanghai() {

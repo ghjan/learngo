@@ -2,6 +2,8 @@ package engine
 
 import (
 	"fmt"
+
+	"github.com/ghjan/learngo/crawer/model"
 )
 
 type ConcurentEngine struct {
@@ -29,17 +31,34 @@ func (e *ConcurentEngine) Run(seeds ...Request) {
 	for _, r := range seeds {
 		e.Scheduler.Submit(r)
 	}
-	itemCount := 0
+	profileCount := 0
 	for {
 		result := <-out
 		for _, item := range result.Items {
-			itemCount++
-			fmt.Printf("Got item #%d:%v\n", itemCount, item)
+			if _, ok := item.(model.Profile); ok {
+				profileCount++
+				fmt.Printf("Got profile #%d:%v\n", profileCount, item)
+			}
 		}
+		//URL dedup
 		for _, request := range result.Requests {
+			if isDuplicate(request.Url) {
+				//log.Printf("Duplicat request: %s", request.Url)
+				continue
+			}
 			e.Scheduler.Submit(request)
 		}
 	}
+}
+
+var visitedUrls = make(map[string]bool)
+
+func isDuplicate(url string) bool {
+	if visitedUrls[url] {
+		return true
+	}
+	visitedUrls[url] = true
+	return false
 }
 
 func (e *ConcurentEngine) createWorker(in chan Request, out chan ParseResult, notify readyNotify) {

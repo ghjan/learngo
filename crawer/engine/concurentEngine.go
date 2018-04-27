@@ -7,7 +7,7 @@ import (
 type ConcurentEngine struct {
 	Scheduler   Scheduler
 	WorkerCount int
-	ItemChan    chan interface{}
+	ItemChan    chan Item
 }
 type Scheduler interface {
 	readyNotify

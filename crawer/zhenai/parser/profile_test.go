@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/ghjan/learngo/crawer/model"
+	"github.com/ghjan/learngo/crawer/engine"
 )
 
 const urlUserProfilePage = "http://album.zhenai.com/u/108415017"
@@ -18,14 +19,14 @@ func TestParseProfile(t *testing.T) {
 	}
 	// fmt.Printf("contents:%s", contents)
 
-	result := ParseProfile(contents, "惠儿")
+	result := ParseProfile(contents, "惠儿", urlUserProfilePage)
 	if len(result.Items) != 1 {
 		t.Errorf("Items should contain 1 element; but was %v", result.Items)
 	}
 
-	actual := result.Items[0].(model.Profile)
+	actual := result.Items[0]
 
-	expected := model.Profile{
+	profile := model.Profile{
 		Age:        50,
 		Height:     156,
 		Weight:     0,
@@ -40,7 +41,7 @@ func TestParseProfile(t *testing.T) {
 		Education:  "高中及以下",
 		Car:        "未购车",
 	}
-
+	expected := engine.Item{Url: urlUserProfilePage, Type: "Zhenai", Id: "108415017", Payload: profile}
 	if actual != expected {
 		t.Errorf("expected %v; but was %v",
 			expected, actual)

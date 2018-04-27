@@ -32,6 +32,7 @@ var houseRe = regexp.MustCompile(
 	`<td><span class="label">住房条件：</span><span field="">([^<]+)</span></td>`)
 var carRe = regexp.MustCompile(
 	`<td><span class="label">是否购车：</span><span field="">([^<]+)</span></td>`)
+
 //var guessRe = regexp.MustCompile(
 //	`<a class="exp-user-name"[^>]*href="(http://album.zhenai.com/u/[\d]+)">([^<]+)</a>`)
 var idUrlRe = regexp.MustCompile(
@@ -39,7 +40,7 @@ var idUrlRe = regexp.MustCompile(
 
 var guessRe = regexp.MustCompile(`<a class="exp-user-name"[^>]*href="(http://album.zhenai.com/u/[0-9]+)">([^<]+)</a>`)
 
-func ParseProfile(contents []byte, name string) engine.ParseResult {
+func ParseProfile(contents []byte, name string, url string) engine.ParseResult {
 	profile := model.Profile{}
 
 	if age, err := strconv.Atoi(extractString(contents, ageRe)); err == nil {
@@ -72,17 +73,21 @@ func ParseProfile(contents []byte, name string) engine.ParseResult {
 	profile.Xinzuo = extractString(
 		contents, xinzuoRe)
 
+	id := extractString(
+		contents, idUrlRe)
+
 	result := engine.ParseResult{
-		Items: []interface{}{profile},
+		Items: []engine.Item{{Url: url, Type: "Zhenai", Id: id, Payload: profile},},
 	}
 	matches := guessRe.FindAllSubmatch(contents, -1)
-	for _, m := range matches{
+	for _, m := range matches {
 		name := string(m[2])
+		url := string(m[1])
 		result.Requests = append(result.Requests,
 			engine.Request{
 				Url: string(m[1]),
 				ParseFunc: func(c []byte) engine.ParseResult {
-					return ParseProfile(c, name)
+					return ParseProfile(c, name, url)
 				},
 			})
 

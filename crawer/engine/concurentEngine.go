@@ -36,6 +36,7 @@ func (e *ConcurentEngine) Run(seeds ...Request) {
 		for _, item := range result.Items {
 			itemCount++
 			fmt.Printf("Got item #%d:%v\n", itemCount, item)
+			// TODO:item去重
 			go func() {
 				e.ItemChan <- item
 			}()

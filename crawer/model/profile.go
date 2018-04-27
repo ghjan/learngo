@@ -12,7 +12,7 @@ type Profile struct {
 	Marriage   string
 	Education  string
 	Occupation string
-	Hokou      string  //籍贯
+	Hokou      string //籍贯
 	Xinzuo     string
 	House      string
 	Car        string

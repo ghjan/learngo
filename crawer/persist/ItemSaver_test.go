@@ -7,10 +7,11 @@ import (
 	"github.com/olivere/elastic"
 	"context"
 	"encoding/json"
+	"github.com/ghjan/learngo/crawer/engine"
 )
 
 func TestItemSaver(t *testing.T) {
-	expected := model.Profile{
+	profile := model.Profile{
 		Age:        50,
 		Height:     156,
 		Weight:     0,
@@ -25,7 +26,9 @@ func TestItemSaver(t *testing.T) {
 		Education:  "高中及以下",
 		Car:        "未购车",
 	}
-	id, err := save(expected)
+	// TODO : add Url and Id
+	expected := engine.Item{Id: "108415017", Type: "Zhenai", Payload: profile}
+	err := save(expected)
 	if err != nil {
 		panic(err)
 	}
@@ -38,18 +41,20 @@ func TestItemSaver(t *testing.T) {
 		panic(err)
 	}
 
-	resp, err := client.Get().Index("dating_profile").Type("zhenai").Id(id).Do(context.Background())
+	resp, err := client.Get().Index("dating_profile").Type(expected.Type).Id(expected.Id).Do(context.Background())
 	if err != nil {
 		panic(err)
 	}
 	t.Logf("%s", resp.Source)
-	var actual model.Profile
+	var actual engine.Item
 	err = json.Unmarshal([]byte(*resp.Source), &actual)
+	actualProfile, _ := model.FromJsonObj(actual.Payload)
+
 	if err != nil {
 		panic(err)
 	}
-	if actual != expected {
-		t.Errorf("Got %v, expected %v", actual, expected)
+	if actualProfile != expected.Payload {
+		t.Errorf("Got %v, expected %v", actualProfile, expected.Payload)
 	}
 
 }

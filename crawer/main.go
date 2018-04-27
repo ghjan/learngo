@@ -5,6 +5,7 @@ import (
 	"github.com/ghjan/learngo/crawer/fetcher"
 	"github.com/ghjan/learngo/crawer/scheduler"
 	"github.com/ghjan/learngo/crawer/zhenai/parser"
+	"github.com/ghjan/learngo/crawer/persist"
 )
 
 const (
@@ -30,7 +31,7 @@ func testShanghai() {
 
 }
 func testConcurentEngine() {
-	eng := engine.ConcurentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100}
+	eng := engine.ConcurentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100, ItemChan: persist.ItemSaver()}
 	eng.Run(engine.Request{Url: urlCityListPage, ParseFunc: parser.ParseCityList})
 }
 

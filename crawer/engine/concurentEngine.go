@@ -2,13 +2,12 @@ package engine
 
 import (
 	"fmt"
-
-	"github.com/ghjan/learngo/crawer/model"
 )
 
 type ConcurentEngine struct {
 	Scheduler   Scheduler
 	WorkerCount int
+	ItemChan    chan interface{}
 }
 type Scheduler interface {
 	readyNotify
@@ -31,14 +30,15 @@ func (e *ConcurentEngine) Run(seeds ...Request) {
 	for _, r := range seeds {
 		e.Scheduler.Submit(r)
 	}
-	profileCount := 0
+	itemCount := 0
 	for {
 		result := <-out
 		for _, item := range result.Items {
-			if _, ok := item.(model.Profile); ok {
-				profileCount++
-				fmt.Printf("Got profile #%d:%v\n", profileCount, item)
-			}
+			itemCount++
+			fmt.Printf("Got item #%d:%v\n", itemCount, item)
+			go func() {
+				e.ItemChan <- item
+			}()
 		}
 		//URL dedup
 		for _, request := range result.Requests {

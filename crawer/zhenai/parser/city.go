@@ -15,7 +15,7 @@ func ParseCity(contents []byte) engine.ParseResult {
 	matches := profileRe.FindAllStringSubmatch(string(contents), -1)
 	result := engine.ParseResult{}
 	for _, m := range matches {
-		result.Items = append(result.Items, "User "+string(m[2]))
+		//result.Items = append(result.Items, "User "+string(m[2]))
 		name := string(m[2])
 		result.Requests = append(result.Requests,
 			engine.Request{

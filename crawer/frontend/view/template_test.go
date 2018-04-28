@@ -1,7 +1,6 @@
-package frontend
+package view
 
 import (
-	"html/template"
 	"os"
 	"testing"
 
@@ -13,13 +12,10 @@ import (
 const urlUserProfilePage = "http://album.zhenai.com/u/108415017"
 
 func TestTemplate(t *testing.T) {
-	template := template.Must(template.ParseFiles("template.html"))
-	page := model.SearchResult{}
-	out, err := os.Create("template.test.html")
-	if err != nil {
-		panic(err)
-	}
-	page.Hits = 123
+	//template := template.Must(template.ParseFiles("template.html"))
+	view := CreateSearchResultView("template.html")
+	pageData := model.SearchResult{}
+	pageData.Hits = 123
 	item := engine.Item{
 		Url:  urlUserProfilePage,
 		Type: "Zhenai",
@@ -41,10 +37,15 @@ func TestTemplate(t *testing.T) {
 		},
 	}
 	for i := 0; i < 10; i++ {
-		page.Items = append(page.Items, item)
+		pageData.Items = append(pageData.Items, item)
+	}
+	out, err := os.Create("template.test.html")
+	if err != nil {
+		panic(err)
 	}
 
-	err = template.Execute(out, page)
+	err = view.Render(out, pageData)
+
 	if err != nil {
 		panic(err)
 	}

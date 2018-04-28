@@ -1,8 +1,8 @@
 package view
 
 import (
-	"html/template"
 	"io"
+	"text/template"
 
 	"github.com/ghjan/learngo/crawer/frontend/model"
 )
@@ -11,15 +11,13 @@ type SearchResultView struct {
 	template *template.Template
 }
 
-func CreateSearchResultView(
-	filename string) SearchResultView {
+//CreateSearchResultView 从文件生成模板对象
+func CreateSearchResultView(filename string) SearchResultView {
 	return SearchResultView{
-		template: template.Must(
-			template.ParseFiles(filename)),
+		template: template.Must(template.ParseFiles(filename)),
 	}
 }
 
-func (s SearchResultView) Render(
-	w io.Writer, data model.SearchResult) error {
+func (s SearchResultView) Render(w io.Writer, data model.SearchResult) error {
 	return s.template.Execute(w, data)
 }

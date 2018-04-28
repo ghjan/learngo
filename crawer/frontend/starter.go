@@ -1,11 +1,16 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
-	"github.com/ghjan/learngo/crawer/frontend/controller"
 	"fmt"
 	"os"
+	"strings"
+
+	"path/filepath"
+
+	"github.com/ghjan/learngo/crawer/frontend/controller"
 )
 
 var (
@@ -16,18 +21,23 @@ var (
 )
 
 func main() {
+	pathPrefix := "crawer/front/view"
 	for _, filename := range templateFiles {
 		if PathExist(filename) {
-			fmt.Println(filename)
+			pathPrefix = getPath(filename)
+			fmt.Println(pathPrefix)
 			http.Handle("/search", controller.CreateSearchResultHandler(filename))
+			break
 		}
 	}
-	http.Handle("/", http.FileServer(
-		http.Dir("crawer/frontend/view")))
-	err := http.ListenAndServe(":8888", nil)
+
+	http.Handle("/", http.FileServer(http.Dir(pathPrefix)))
+	err := http.ListenAndServe(":8088", nil)
+
 	if err != nil {
 		panic(err)
 	}
+
 }
 
 func PathExist(_path string) bool {
@@ -36,4 +46,12 @@ func PathExist(_path string) bool {
 		return false
 	}
 	return true
+}
+
+func getPath(filename string) string {
+	dir, err := filepath.Abs(filepath.Dir(filename))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return strings.Replace(dir, "\\", "/", -1)
 }

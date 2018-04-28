@@ -7,7 +7,7 @@ import (
 	//"github.com/ghjan/learngo/crawer/engine"
 )
 
-//const urlCityListPage = "http://www.zhenai.com/zhenghun"
+const urlCityListPage = "http://www.zhenai.com/zhenghun"
 
 func TestParseCityList(t *testing.T) {
 
@@ -17,7 +17,7 @@ func TestParseCityList(t *testing.T) {
 		panic(err)
 	}
 	//fmt.Printf("contents:%s", contents)
-	result := ParseCityList(contents)
+	result := ParseCityList(contents, urlCityListPage)
 	const resultSize = 470
 	expectedUrls := []string{
 		"http://www.zhenai.com/zhenghun/aba",

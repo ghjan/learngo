@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/ghjan/learngo/crawer/frontend/controller"
-	"fmt"
 	"os"
+	"fmt"
 )
 
 var (
@@ -22,12 +22,13 @@ func main() {
 			http.Handle("/search", controller.CreateSearchResultHandler(filename))
 		}
 	}
-	http.Handle("/", http.FileServer(
-		http.Dir("crawer/frontend/view")))
+
 	err := http.ListenAndServe(":8888", nil)
+
 	if err != nil {
 		panic(err)
 	}
+
 }
 
 func PathExist(_path string) bool {

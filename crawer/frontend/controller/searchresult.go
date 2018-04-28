@@ -2,16 +2,19 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 
-	"github.com/ghjan/learngo/crawer/frontend/view"
-	"github.com/olivere/elastic"
-	"strconv"
-	"fmt"
-	"github.com/ghjan/learngo/crawer/frontend/model"
 	"context"
 	"reflect"
+
+	"regexp"
+
+	//"github.com/olivere/elastic/config"
 	"github.com/ghjan/learngo/crawer/engine"
+	"github.com/ghjan/learngo/crawer/frontend/model"
+	"github.com/ghjan/learngo/crawer/frontend/view"
+	"github.com/olivere/elastic"
 )
 
 type SearchResultHandler struct {
@@ -19,52 +22,89 @@ type SearchResultHandler struct {
 	client *elastic.Client
 }
 
-//ServeHTTP localhost:8888/search?q=男 已购房&from=20  这里的from是开始的记录（因为分页）
-func (h SearchResultHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	q := strings.TrimSpace(req.FormValue("q"))
-	fmt.Printf("q:%s\n", q)
-	from, err := strconv.Atoi(req.FormValue("from"))
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-	}
-	fmt.Printf("from:%d\n", from)
-	fmt.Fprintf(w, "q=%s, from=%d", q, from)
-	page, err := h.getSearchResult(q, from)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-	}
-	err = h.view.Render(w, page)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-	}
-}
-
-func CreateSearchResultHandler(template string) SearchResultHandler {
+func CreateSearchResultHandler(
+	template string) SearchResultHandler {
+	//client, err := elastic.NewClient(
+	//	elastic.SetSniff(false))
 	client, err := elastic.NewClient(
 		elastic.SetURL("http://elastic.davidzhang.xin:9200", "http://localhost:9200"),
-		elastic.SetMaxRetries(10), elastic.SetSniff(false))
+		elastic.SetSniff(false))
 
 	if err != nil {
 		panic(err)
 	}
+
 	return SearchResultHandler{
-		view:   view.CreateSearchResultView(template),
+		view: view.CreateSearchResultView(
+			template),
 		client: client,
 	}
 }
 
-func (h SearchResultHandler) getSearchResult(q string, from int) (model.SearchResult, error) {
+func (h SearchResultHandler) ServeHTTP(
+	w http.ResponseWriter, req *http.Request) {
+	q := strings.TrimSpace(req.FormValue("q"))
+
+	from, err := strconv.Atoi(
+		req.FormValue("from"))
+	if err != nil {
+		from = 0
+	}
+
+	page, err := h.getSearchResult(q, from)
+	if err != nil {
+		http.Error(w, err.Error(),
+			http.StatusBadRequest)
+		return
+	}
+
+	err = h.view.Render(w, page)
+	if err != nil {
+		http.Error(w, err.Error(),
+			http.StatusBadRequest)
+		return
+	}
+}
+
+const pageSize = 10
+
+func (h SearchResultHandler) getSearchResult(
+	q string, from int) (model.SearchResult, error) {
 	var result model.SearchResult
-	resp, err := h.client.Search("dating_profile").Type("zhenai").Query(elastic.NewQueryStringQuery(q)).From(from).Do(context.Background())
+	result.Query = q
+
+	resp, err := h.client.
+		Search("dating_profile").
+		//Search(config.ElasticIndex).
+		Query(elastic.NewQueryStringQuery(
+		rewriteQueryString(q))).
+		From(from).
+		Do(context.Background())
+
 	if err != nil {
 		return result, err
 	}
+
 	result.Hits = resp.TotalHits()
 	result.Start = from
-	for _, item := range resp.Each(reflect.TypeOf(engine.Item{})) {
-		result.Items = append(result.Items, item.(engine.Item))
+	result.Items = resp.Each(
+		reflect.TypeOf(engine.Item{}))
+	if result.Start == 0 {
+		result.PrevFrom = -1
+	} else {
+		result.PrevFrom =
+			(result.Start - 1) /
+				pageSize * pageSize
 	}
+	result.NextFrom =
+		result.Start + len(result.Items)
 
-	return result, err
+	return result, nil
+}
 
+// Rewrites query string. Replaces field names
+// like "Age" to "Payload.Age"
+func rewriteQueryString(q string) string {
+	re := regexp.MustCompile(`([A-Z][a-z]*):`)
+	return re.ReplaceAllString(q, "Payload.$1:")
 }

@@ -2,17 +2,19 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 
 	"context"
 	"reflect"
-	"strconv"
 
+	"regexp"
+
+	//"github.com/olivere/elastic/config"
 	"github.com/ghjan/learngo/crawer/engine"
 	"github.com/ghjan/learngo/crawer/frontend/model"
 	"github.com/ghjan/learngo/crawer/frontend/view"
 	"github.com/olivere/elastic"
-	"regexp"
 )
 
 type SearchResultHandler struct {
@@ -20,7 +22,10 @@ type SearchResultHandler struct {
 	client *elastic.Client
 }
 
-func CreateSearchResultHandler(template string) SearchResultHandler {
+func CreateSearchResultHandler(
+	template string) SearchResultHandler {
+	//client, err := elastic.NewClient(
+	//	elastic.SetSniff(false))
 	client, err := elastic.NewClient(
 		elastic.SetURL("http://elastic.davidzhang.xin:9200", "http://localhost:9200"),
 		elastic.SetSniff(false))
@@ -28,28 +33,35 @@ func CreateSearchResultHandler(template string) SearchResultHandler {
 	if err != nil {
 		panic(err)
 	}
+
 	return SearchResultHandler{
-		view:   view.CreateSearchResultView(template),
+		view: view.CreateSearchResultView(
+			template),
 		client: client,
 	}
 }
 
-//ServeHTTP localhost:8888/search?q=男 已购房&from=20  这里的from是开始的记录（因为分页）
-func (h SearchResultHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+func (h SearchResultHandler) ServeHTTP(
+	w http.ResponseWriter, req *http.Request) {
 	q := strings.TrimSpace(req.FormValue("q"))
-	from, err := strconv.Atoi(req.FormValue("from"))
+
+	from, err := strconv.Atoi(
+		req.FormValue("from"))
 	if err != nil {
 		from = 0
 	}
-	//fmt.Printf(w, "q=%s, from=%d", q, from)
+
 	page, err := h.getSearchResult(q, from)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(),
+			http.StatusBadRequest)
 		return
 	}
+
 	err = h.view.Render(w, page)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(),
+			http.StatusBadRequest)
 		return
 	}
 }
@@ -60,12 +72,19 @@ func (h SearchResultHandler) getSearchResult(
 	q string, from int) (model.SearchResult, error) {
 	var result model.SearchResult
 	result.Query = q
-	resp, err := h.client.Search("dating_profile").
-		Query(elastic.NewQueryStringQuery(rewriteQueryString(q))).
-		From(from).Do(context.Background())
+
+	resp, err := h.client.
+		Search("dating_profile").
+		//Search(config.ElasticIndex).
+		Query(elastic.NewQueryStringQuery(
+		rewriteQueryString(q))).
+		From(from).
+		Do(context.Background())
+
 	if err != nil {
 		return result, err
 	}
+
 	result.Hits = resp.TotalHits()
 	result.Start = from
 	result.Items = resp.Each(

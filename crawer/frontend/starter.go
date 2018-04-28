@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	"fmt"
 	"os"
 	"strings"
 
@@ -25,7 +24,6 @@ func main() {
 	for _, filename := range templateFiles {
 		if PathExist(filename) {
 			pathPrefix = getPath(filename)
-			fmt.Println(pathPrefix)
 			http.Handle("/search", controller.CreateSearchResultHandler(filename))
 			break
 		}

@@ -1,11 +1,14 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/ghjan/learngo/crawler/engine"
 	"github.com/ghjan/learngo/crawler/fetcher"
 	"github.com/ghjan/learngo/crawler/scheduler"
 	"github.com/ghjan/learngo/crawler/zhenai/parser"
 	"github.com/ghjan/learngo/crawler_distributed/client"
+	"github.com/ghjan/learngo/crawler_distributed/config"
 )
 
 const (
@@ -31,7 +34,7 @@ func testShanghai() {
 
 }
 func testConcurentEngine() {
-	itemChan, err := client.ItemSaver(":1234")
+	itemChan, err := client.ItemSaver(fmt.Sprintf(":%d", config.ItemSaverPort))
 	if err != nil {
 		panic(err)
 	}

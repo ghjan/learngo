@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
+	"fmt"
 )
 
 //ServeRpc 开一个Rpc server
@@ -15,6 +16,7 @@ func ServeRpc(host string, service interface{}) error {
 	if err != nil {
 		return err
 	}
+	fmt.Printf("listening in host:%s", host)
 	for {
 		conn, err := listener.Accept()
 		if err != nil {

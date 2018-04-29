@@ -2,8 +2,6 @@ package engine
 
 import (
 	"log"
-
-	"github.com/ghjan/learngo/crawler/fetcher"
 )
 
 type SimpleEngine struct{}
@@ -18,7 +16,7 @@ func (e *SimpleEngine) Run(seeds ...Request) {
 		r := requests[0]
 		requests = requests[1:]
 
-		parseResult, err := worker(r)
+		parseResult, err := Worker(r)
 		if err != nil {
 			log.Printf("Fetcher: error "+" fetching url %s: %v", r.Url, err)
 			continue
@@ -30,15 +28,4 @@ func (e *SimpleEngine) Run(seeds ...Request) {
 		}
 	}
 
-}
-
-func worker(r Request) (ParseResult, error) {
-	//log.Printf("Fetching url:%s", r.Url)
-	body, err := fetcher.Fetch(r.Url)
-	if err != nil {
-		return ParseResult{}, err
-	}
-
-	parseResult := r.Parser.Parse(body, r.Url)
-	return parseResult, nil
 }

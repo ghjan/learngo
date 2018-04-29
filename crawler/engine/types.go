@@ -1,5 +1,7 @@
 package engine
 
+import "github.com/ghjan/learngo/crawler/config"
+
 type ParserFunc func([]byte, string) ParseResult
 
 type Parser interface {
@@ -23,16 +25,6 @@ type Item struct {
 	Payload interface{}
 }
 
-//type SerializedParser struct {
-//	Name string
-//	Args         []interface{}
-//}
-//{"ParseCityList",nil}
-//{"ProfileParser", userName}
-
-//func NilParser([]byte) ParseResult {
-//	return ParseResult{}
-//}
 type NilParser struct{}
 
 func (NilParser) Parse(contents []byte, url string) ParseResult {
@@ -40,7 +32,7 @@ func (NilParser) Parse(contents []byte, url string) ParseResult {
 }
 
 func (NilParser) Serialize() (name string, args interface{}) {
-	return "NilParser", nil
+	return config.NilParser, nil
 }
 
 type FuncParser struct {

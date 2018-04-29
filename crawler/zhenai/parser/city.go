@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/ghjan/learngo/crawler/config"
 	"github.com/ghjan/learngo/crawler/engine"
 )
 
@@ -29,7 +30,7 @@ func ParseCity(contents []byte, url string) engine.ParseResult {
 	for _, m := range matches2 {
 		result.Requests = append(result.Requests, engine.Request{
 			Url:    string(m[1]),
-			Parser: engine.NewFuncParser(ParseCity, "ParseCity"),
+			Parser: engine.NewFuncParser(ParseCity, config.ParseCity),
 		})
 	}
 

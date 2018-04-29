@@ -20,16 +20,16 @@ func ParseCity(contents []byte, url string) engine.ParseResult {
 		name := string(m[2])
 		result.Requests = append(result.Requests,
 			engine.Request{
-				Url:       url,
-				ParseFunc: ProfileParser(name),
+				Url:    url,
+				Parser: NewProfileParser(name),
 			})
 	}
 
 	matches2 := cityUrlRe.FindAllSubmatch(contents, -1)
 	for _, m := range matches2 {
 		result.Requests = append(result.Requests, engine.Request{
-			Url:       string(m[1]),
-			ParseFunc: ParseCity,
+			Url:    string(m[1]),
+			Parser: engine.NewFuncParser(ParseCity, "ParseCity"),
 		})
 	}
 

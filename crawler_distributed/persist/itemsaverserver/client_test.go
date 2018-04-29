@@ -12,12 +12,14 @@ import (
 )
 
 const urlUserProfilePage = "http://album.zhenai.com/u/108415017"
+const index = "test1"
 
 func TestItemSaver(t *testing.T) {
 	const host = ":1234"
 
 	// start ItemSaverServer
-	go serveRpc(host, "test1")
+
+	go serveRpc(host, index)
 	time.Sleep(time.Second)
 
 	// start ItemSaverClient

@@ -3,9 +3,9 @@ package main
 import (
 	"github.com/ghjan/learngo/crawler/engine"
 	"github.com/ghjan/learngo/crawler/fetcher"
+	"github.com/ghjan/learngo/crawler/persist"
 	"github.com/ghjan/learngo/crawler/scheduler"
 	"github.com/ghjan/learngo/crawler/zhenai/parser"
-	"github.com/ghjan/learngo/crawler/persist"
 )
 
 const (
@@ -27,8 +27,7 @@ func main() {
 
 func testShanghai() {
 	eng := engine.ConcurentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100}
-	eng.Run(engine.Request{Url: urlShanghaiPage, ParseFunc: parser.ParseCity})
-
+	eng.Run(engine.Request{Url: urlShanghaiPage, Parser: engine.NewFuncParser(parser.ParseCity, " ParseCity")})
 }
 func testConcurentEngine() {
 	itemChan, err := persist.ItemSaver("dating_profile")
@@ -36,12 +35,12 @@ func testConcurentEngine() {
 		panic(err)
 	}
 	eng := engine.ConcurentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100, ItemChan: itemChan}
-	eng.Run(engine.Request{Url: urlCityListPage, ParseFunc: parser.ParseCityList})
+	eng.Run(engine.Request{Url: urlCityListPage, Parser: engine.NewFuncParser(parser.ParseCityList, " ParseCityList")})
 }
 
 func testSimpleEngine() {
 	eng := engine.SimpleEngine{}
-	eng.Run(engine.Request{Url: urlCityListPage, ParseFunc: parser.ParseCityList})
+	eng.Run(engine.Request{Url: urlCityListPage, Parser: engine.NewFuncParser(parser.ParseCityList, " ParseCityList")})
 }
 
 func testCityList() {

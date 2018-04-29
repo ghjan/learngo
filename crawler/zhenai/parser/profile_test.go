@@ -19,7 +19,7 @@ func TestParseProfile(t *testing.T) {
 	}
 	// fmt.Printf("contents:%s", contents)
 
-	result := ParseProfile(contents, "惠儿", urlUserProfilePage)
+	result := parseProfile(contents, "惠儿", urlUserProfilePage)
 	if len(result.Items) != 1 {
 		t.Errorf("Items should contain 1 element; but was %v", result.Items)
 	}

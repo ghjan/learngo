@@ -5,9 +5,10 @@ import (
 )
 
 type ConcurentEngine struct {
-	Scheduler   Scheduler
-	WorkerCount int
-	ItemChan    chan Item
+	Scheduler        Scheduler
+	WorkerCount      int
+	ItemChan         chan Item
+	RequestProcessor Processor
 }
 type Scheduler interface {
 	readyNotify
@@ -15,6 +16,7 @@ type Scheduler interface {
 	WorkerChan() chan Request
 	Run()
 }
+type Processor func(Request) (ParseResult, error)
 
 type readyNotify interface {
 	WorkerReady(chan Request)
@@ -69,7 +71,7 @@ func (e *ConcurentEngine) createWorker(in chan Request, out chan ParseResult, no
 			// tell notify i'm ready
 			notify.WorkerReady(in)
 			request := <-in
-			result, err := Worker(request)
+			result, err := e.RequestProcessor(request)
 			if err != nil {
 				continue
 			}

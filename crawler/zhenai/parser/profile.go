@@ -6,6 +6,7 @@ import (
 
 	"github.com/ghjan/learngo/crawler/engine"
 	"github.com/ghjan/learngo/crawler/model"
+	"github.com/ghjan/learngo/crawler/config"
 )
 
 var ageRe = regexp.MustCompile(
@@ -113,7 +114,7 @@ func (p *ProfileParser) Parse(contents []byte, url string) engine.ParseResult {
 }
 
 func (p *ProfileParser) Serialize() (name string, args interface{}) {
-	return "ProfileParser", p.userName
+	return config.ParseProfile, p.userName
 }
 
 //func ProfileParser(name string) engine.ParserFunc {

@@ -101,6 +101,6 @@ func deserializeParser(
 		}
 	default:
 		return nil, errors.New(
-			"unknown parser name")
+			"unknown parser name:"+p.Name)
 	}
 }

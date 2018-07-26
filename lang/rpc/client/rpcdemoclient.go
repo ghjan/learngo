@@ -17,13 +17,13 @@ func main() {
 
 	var result float64
 	if err = client.Call("DemoService.Div", rpcdemo.Args{10, 3}, &result); err == nil {
-		fmt.Println(result, err)
+		fmt.Println(result)
 	} else {
 		fmt.Println(err)
 	}
 
 	if err = client.Call("DemoService.Div", rpcdemo.Args{10, 0}, &result); err == nil {
-		fmt.Println(result, err)
+		fmt.Println(result)
 	} else {
 		fmt.Println(err)
 	}

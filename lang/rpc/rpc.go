@@ -1,6 +1,6 @@
 package rpcdemo
 
-import "github.com/kataras/iris/core/errors"
+import "errors"
 
 //Service.Method
 

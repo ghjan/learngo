@@ -12,7 +12,7 @@ type Args struct {
 
 func (DemoService) Div(args Args, result *float64) error {
 	if args.B == 0 {
-		return errors.New("divisioin by zero")
+		return errors.New("division by zero")
 	}
 
 	*result = float64(args.A) / float64(args.B)

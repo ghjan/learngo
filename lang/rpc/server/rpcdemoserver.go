@@ -24,3 +24,15 @@ func main() {
 		go jsonrpc.ServeConn(conn)
 	}
 }
+
+/* use telnet to test rpc server
+[root@izuf6go9cwac1w1u5nxv6sz ~]# telnet localhost 1234
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+{"method":"DemoService.Div","params":[{"A":3, "B":4}],"id":1}
+{"id":1,"result":0.75,"error":null}
+{"method":"DemoService.Div","params":[{"A":3, "B":0}],"id":1234}
+{"id":1234,"result":null,"error":"division by zero"}
+
+ */

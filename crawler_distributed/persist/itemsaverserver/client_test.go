@@ -18,7 +18,6 @@ func TestItemSaver(t *testing.T) {
 	const host = ":1234"
 
 	// start ItemSaverServer
-
 	go serveRpc(host, index)
 	time.Sleep(time.Second)
 

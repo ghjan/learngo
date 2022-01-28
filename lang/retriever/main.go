@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/ghjan/learngo/lang/retriever/mock"
+	"github.com/ghjan/learngo/lang/retriever/real"
 	"time"
 
-	"github.com/ghjan/learngo/retriever/mock"
-	"github.com/ghjan/learngo/retriever/real"
 )
 
 type Retriever interface {

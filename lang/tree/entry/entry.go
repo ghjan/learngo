@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/ghjan/learngo/lang/tree/tree"
+	"github.com/ghjan/learngo/lang/tree"
 	"golang.org/x/tools/container/intsets"
 )
 

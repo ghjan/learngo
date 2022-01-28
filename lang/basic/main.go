@@ -2,11 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"math"
 	"math/cmplx"
-	"io/ioutil"
-	"io"
-	"os"
 )
 
 func main() {
@@ -51,14 +49,14 @@ func consts() {
 
 func enums() {
 	const (
-		cpp        = iota
+		cpp = iota
 		_
 		python
 		golang
 		javascript
 	)
 	const (
-		b  = 1 << (10 * iota)
+		b = 1 << (10 * iota)
 		kb
 		mb
 		gb
@@ -90,7 +88,6 @@ func printFile(filename string) {
 	}
 
 }
-
 
 func grade(score int) string {
 	g := ""

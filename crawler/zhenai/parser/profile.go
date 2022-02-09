@@ -4,9 +4,9 @@ import (
 	"regexp"
 	"strconv"
 
+	"github.com/ghjan/learngo/crawler/config"
 	"github.com/ghjan/learngo/crawler/engine"
 	"github.com/ghjan/learngo/crawler/model"
-	"github.com/ghjan/learngo/crawler/config"
 )
 
 var ageRe = regexp.MustCompile(
@@ -37,9 +37,9 @@ var carRe = regexp.MustCompile(
 //var guessRe = regexp.MustCompile(
 //	`<a class="exp-user-name"[^>]*href="(http://album.zhenai.com/u/[\d]+)">([^<]+)</a>`)
 var idUrlRe = regexp.MustCompile(
-	`http://album.zhenai.com/u/([\d]+)`)
+	`http://.*album\.zhenai\.com/u/([\d]+)`)
 
-var guessRe = regexp.MustCompile(`<a class="exp-user-name"[^>]*href="(http://album.zhenai.com/u/[0-9]+)">([^<]+)</a>`)
+var guessRe = regexp.MustCompile(`<a class="exp-user-name"[^>]*href="(http://.*album\.zhenai\.com/u/[0-9]+)">([^<]+)</a>`)
 
 func parseProfile(contents []byte, name string, url string) engine.ParseResult {
 	profile := model.Profile{}

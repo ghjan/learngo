@@ -8,8 +8,8 @@ import (
 	"github.com/ghjan/learngo/crawler/engine"
 )
 
-var profileRe = regexp.MustCompile(`<th><a href="(http://album.zhenai.com/u/[0-9]+)"[^>]*>([^<]+)</a></th>`)
-var cityUrlRe = regexp.MustCompile(`href="(http://www.zhenai.com/zhenghun/[^"]+)">[^<]+</a>`)
+var profileRe = regexp.MustCompile(`<th><a href="(http://.*album\.zhenai\.com/u/[0-9]+)"[^>]*>([^<]+)</a></th>`)
+var cityUrlRe = regexp.MustCompile(`href="(http://.*www\.zhenai\.com/zhenghun/[^"]+)">[^<]+</a>`)
 
 func ParseCity(contents []byte, url string) engine.ParseResult {
 

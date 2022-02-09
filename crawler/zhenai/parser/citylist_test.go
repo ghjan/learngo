@@ -7,7 +7,7 @@ import (
 	//"github.com/ghjan/learngo/crawler/engine"
 )
 
-const urlCityListPage = "http://www.zhenai.com/zhenghun"
+const urlCityListPage = "http://localhost:8080/mock/www.zhenai.com/zhenghun"
 
 func TestParseCityList(t *testing.T) {
 
@@ -20,9 +20,9 @@ func TestParseCityList(t *testing.T) {
 	result := ParseCityList(contents, urlCityListPage)
 	const resultSize = 470
 	expectedUrls := []string{
-		"http://www.zhenai.com/zhenghun/aba",
-		"http://www.zhenai.com/zhenghun/akesu",
-		"http://www.zhenai.com/zhenghun/alashanmeng",
+		"http://localhost:8080/mock/www.zhenai.com/zhenghun/aba",
+		"http://localhost:8080/mock/www.zhenai.com/zhenghun/akesu",
+		"http://localhost:8080/mock/www.zhenai.com/zhenghun/alashanmeng",
 	}
 	//expectedCities := []engine.Item{
 	//	{Id: "aba", Type: "zhenai", Payload: "City 阿坝"},

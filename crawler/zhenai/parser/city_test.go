@@ -8,7 +8,7 @@ import (
 	//"github.com/ghjan/learngo/crawler/engine"
 )
 
-const urlCityUserPage = "http://www.zhenai.com/zhenghun/aba"
+const urlCityUserPage = "http://localhost:8080/mock/www.zhenai.com/zhenghun/aba"
 
 func TestParseCity(t *testing.T) {
 

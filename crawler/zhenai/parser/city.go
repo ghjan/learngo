@@ -8,7 +8,7 @@ import (
 	"github.com/ghjan/learngo/crawler/engine"
 )
 
-var profileRe = regexp.MustCompile(`<th><a href="(http://.*album\.zhenai\.com/u/[0-9]+)"[^>]*>([^<]+)</a></th>`)
+var profileRe = regexp.MustCompile(`<a href="(http://.*album\.zhenai\.com/u/[0-9]+)"[^>]*>([^<]+)</a>`)
 var cityUrlRe = regexp.MustCompile(`href="(http://.*www\.zhenai\.com/zhenghun/[^"]+)">[^<]+</a>`)
 
 func ParseCity(contents []byte, url string) engine.ParseResult {
@@ -24,6 +24,7 @@ func ParseCity(contents []byte, url string) engine.ParseResult {
 				Url:    url,
 				Parser: NewProfileParser(name),
 			})
+		//fmt.Printf("--ParseCity, profile url:%s \n", url)
 	}
 
 	matches2 := cityUrlRe.FindAllSubmatch(contents, -1)
@@ -32,8 +33,9 @@ func ParseCity(contents []byte, url string) engine.ParseResult {
 			Url:    string(m[1]),
 			Parser: engine.NewFuncParser(ParseCity, config.ParseCity),
 		})
+		//fmt.Printf("--ParseCity, city url:%s \n", string(m[1]))
 	}
 
-	fmt.Printf("ParseCity, Matches found: %d, matches2 found:%d \n", len(matches), len(matches2))
+	fmt.Printf("ParseCity, Matches(profile) found: %d, matches2(city) found:%d \n", len(matches), len(matches2))
 	return result
 }

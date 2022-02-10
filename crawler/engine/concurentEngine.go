@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-type ConcurentEngine struct {
+type ConcurrentEngine struct {
 	Scheduler        Scheduler
 	WorkerCount      int
 	ItemChan         chan Item
@@ -22,18 +22,22 @@ type readyNotify interface {
 	WorkerReady(chan Request)
 }
 
-func (e *ConcurentEngine) Run(seeds ...Request) {
+func (e *ConcurrentEngine) Run(seeds ...Request) {
 	out := make(chan ParseResult)
+	//运行调度器
 	e.Scheduler.Run()
 
+	//创建若干个worker
 	for i := 0; i < e.WorkerCount; i++ {
 		e.createWorker(e.Scheduler.WorkerChan(), out, e.Scheduler)
 	}
+	//提交种子url（爬虫开始爬取信息的初始页面）
 	for _, r := range seeds {
 		e.Scheduler.Submit(r)
 	}
 	itemCount := 0
 	for {
+		//处理爬取结果中的信息
 		result := <-out
 		for _, item := range result.Items {
 			itemCount++
@@ -43,6 +47,8 @@ func (e *ConcurentEngine) Run(seeds ...Request) {
 				e.ItemChan <- item
 			}()
 		}
+
+		//处理爬取结果中的其他url
 		//URL dedup
 		for _, request := range result.Requests {
 			if isDuplicate(request.Url) {
@@ -64,7 +70,7 @@ func isDuplicate(url string) bool {
 	return false
 }
 
-func (e *ConcurentEngine) createWorker(in chan Request, out chan ParseResult, notify readyNotify) {
+func (e *ConcurrentEngine) createWorker(in chan Request, out chan ParseResult, notify readyNotify) {
 	//in := make(chan Request)
 	go func() {
 		for {

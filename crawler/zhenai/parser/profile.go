@@ -74,8 +74,7 @@ func parseProfile(contents []byte, name string, url string) engine.ParseResult {
 	profile.Xinzuo = extractString(
 		contents, xinzuoRe)
 
-	id := extractString(
-		contents, idUrlRe)
+	id := extractString([]byte(url), idUrlRe)
 
 	result := engine.ParseResult{
 		Items: []engine.Item{{Url: url, Type: "Zhenai", Id: id, Payload: profile}},

@@ -36,16 +36,16 @@ func main() {
 	//printCityList([]byte(cityText))
 	//testCityList()
 	//testSimpleEngine()
-	testConcurentEngine()
+	testConcurrentEngine()
 	//testShanghai()
 }
 
 func testShanghai() {
-	eng := engine.ConcurentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100}
+	eng := engine.ConcurrentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100}
 	eng.Run(engine.Request{Url: urlShanghaiPage, Parser: engine.NewFuncParser(parser.ParseCity, config1.ParseCity)})
 
 }
-func testConcurentEngine() {
+func testConcurrentEngine() {
 	flag.Parse()
 	if *itemSaverHost == "" {
 		fmt.Println("please give a itemSaverHost!")
@@ -68,7 +68,7 @@ func testConcurentEngine() {
 	if err != nil {
 		panic(err)
 	}
-	eng := engine.ConcurentEngine{
+	eng := engine.ConcurrentEngine{
 		Scheduler:        &scheduler.QueuedScheduler{},
 		WorkerCount:      100,
 		ItemChan:         itemChan,

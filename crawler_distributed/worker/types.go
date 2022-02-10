@@ -33,12 +33,14 @@ type ParseResult struct {
 	Requests []Request
 }
 
+// SerializeRequest :可序列化的request
 func SerializeRequest(r engine.Request) Request {
 	name, args := r.Parser.Serialize()
 	return Request{Url: r.Url,
 		Parser: SerializedParser{Name: name, Args: args}}
 }
 
+// SerializeResult :可序列化的Result
 func SerializeResult(r engine.ParseResult) ParseResult {
 	result := ParseResult{Items: r.Items}
 	for _, req := range r.Requests {
@@ -47,6 +49,7 @@ func SerializeResult(r engine.ParseResult) ParseResult {
 	return result
 }
 
+// DeserializeRequest :反序列化request
 func DeserializeRequest(
 	r Request) (engine.Request, error) {
 	parser, err := deserializeParser(r.Parser)
@@ -59,6 +62,7 @@ func DeserializeRequest(
 	}, nil
 }
 
+// DeserializeResult :反序列化result
 func DeserializeResult(
 	r ParseResult) engine.ParseResult {
 	result := engine.ParseResult{
@@ -101,6 +105,6 @@ func deserializeParser(
 		}
 	default:
 		return nil, errors.New(
-			"unknown parser name:"+p.Name)
+			"unknown parser name:" + p.Name)
 	}
 }

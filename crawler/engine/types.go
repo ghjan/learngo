@@ -4,8 +4,11 @@ import "github.com/ghjan/learngo/crawler/config"
 
 type ParserFunc func([]byte, string) ParseResult
 
+// Parser : 解析器
 type Parser interface {
+	// Parse : 解析方法 返回解析结果
 	Parse(contents []byte, url string) ParseResult
+	// Serialize : 序列化函数 返回序列化的名称，以及参数列表
 	Serialize() (name string, args interface{})
 }
 type Request struct {
@@ -48,7 +51,7 @@ func (f *FuncParser) Serialize() (name string, args interface{}) {
 	return f.name, nil
 }
 
-// a factory to produce FuncParser
+// NewFuncParser :a factory to produce FuncParser
 func NewFuncParser(p ParserFunc, name string) *FuncParser {
 	return &FuncParser{
 		parser: p,

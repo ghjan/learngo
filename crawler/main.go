@@ -1,12 +1,12 @@
 package main
 
 import (
+	"github.com/ghjan/learngo/crawler/config"
 	"github.com/ghjan/learngo/crawler/engine"
 	"github.com/ghjan/learngo/crawler/fetcher"
 	"github.com/ghjan/learngo/crawler/persist"
 	"github.com/ghjan/learngo/crawler/scheduler"
 	"github.com/ghjan/learngo/crawler/zhenai/parser"
-	"github.com/ghjan/learngo/crawler/config"
 )
 
 const (
@@ -22,8 +22,8 @@ func main() {
 	//printCityList([]byte(cityText))
 	//testCityList()
 	//testSimpleEngine()
-	testConcurentEngine()
-	//testShanghai()
+	//testConcurrentEngine()
+	testShanghai()
 }
 
 func testShanghai() {
@@ -31,16 +31,16 @@ func testShanghai() {
 	if err != nil {
 		panic(err)
 	}
-	eng := engine.ConcurentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100, ItemChan: itemChan,
+	eng := engine.ConcurrentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100, ItemChan: itemChan,
 		RequestProcessor: engine.Worker}
 	eng.Run(engine.Request{Url: urlShanghaiPage, Parser: engine.NewFuncParser(parser.ParseCity, config.ParseCity)})
 }
-func testConcurentEngine() {
+func testConcurrentEngine() {
 	itemChan, err := persist.ItemSaver("dating_profile")
 	if err != nil {
 		panic(err)
 	}
-	eng := engine.ConcurentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100, ItemChan: itemChan,
+	eng := engine.ConcurrentEngine{Scheduler: &scheduler.QueuedScheduler{}, WorkerCount: 100, ItemChan: itemChan,
 		RequestProcessor: engine.Worker}
 	eng.Run(engine.Request{Url: urlCityListPage, Parser: engine.NewFuncParser(parser.ParseCityList, config.ParseCityList)})
 }

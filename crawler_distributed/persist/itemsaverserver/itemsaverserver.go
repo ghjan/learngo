@@ -15,7 +15,7 @@ var port = flag.Int("port", 0, "itemsaver port")
 
 func main() {
 	var (
-		err         error
+		err error
 	)
 	flag.Parse()
 	if *port == 0 {

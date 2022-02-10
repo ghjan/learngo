@@ -22,9 +22,9 @@ func TestParseCity(t *testing.T) {
 	result := ParseCity(contents, urlCityUserPage)
 	const resultSize = 20
 	expectedUrls := []string{
-		"http://album.zhenai.com/u/108415017",
-		"http://album.zhenai.com/u/1314495053",
-		"http://album.zhenai.com/u/1121586032",
+		"http://localhost:8080/mock/album.zhenai.com/u/108415017",
+		"http://localhost:8080/mock/album.zhenai.com/u/1314495053",
+		"http://localhost:8080/mock/album.zhenai.com/u/1121586032",
 	}
 	//expectedUsers := []engine.Item{
 	//	{Id: "108415017", Type: "Zhenai", Payload: "User 惠儿"},

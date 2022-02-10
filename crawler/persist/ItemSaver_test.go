@@ -3,11 +3,11 @@ package persist
 import (
 	"testing"
 
-	"github.com/ghjan/learngo/crawler/model"
-	"gopkg.in/olivere/elastic.v5"
 	"context"
 	"encoding/json"
 	"github.com/ghjan/learngo/crawler/engine"
+	"github.com/ghjan/learngo/crawler/model"
+	"github.com/olivere/elastic/v7"
 )
 
 func TestItemSaver(t *testing.T) {
@@ -17,7 +17,7 @@ func TestItemSaver(t *testing.T) {
 		Weight:     0,
 		Income:     "3000元以下",
 		Gender:     "女",
-		Name:       "惠儿",
+		Name:       "飘雪",
 		Xinzuo:     "魔羯座",
 		Occupation: "销售总监",
 		Marriage:   "离异",
@@ -48,7 +48,7 @@ func TestItemSaver(t *testing.T) {
 	}
 	t.Logf("%s", resp.Source)
 	var actual engine.Item
-	err = json.Unmarshal([]byte(*resp.Source), &actual)
+	err = json.Unmarshal([]byte(resp.Source), &actual)
 	actualProfile, _ := model.FromJsonObj(actual.Payload)
 
 	if err != nil {

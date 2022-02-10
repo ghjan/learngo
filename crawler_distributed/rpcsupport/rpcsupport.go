@@ -1,31 +1,48 @@
 package rpcsupport
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
-	"fmt"
+	"time"
 )
 
 //ServeRpc 开一个Rpc server
-func ServeRpc(host string, service interface{}) error {
+func ServeRpc(host string, service interface{}, serverReady chan struct{}) (err error) {
 	rpc.Register(service)
+	if serverReady == nil {
+		serverReady = make(chan struct{})
+	}
 
 	listener, err := net.Listen("tcp", host)
 	if err != nil {
-		return err
+		return
 	}
 	fmt.Printf("listening in host:%s", host)
+	readySent := false
 	for {
-		conn, err := listener.Accept()
+		var (
+			conn net.Conn
+		)
+		timer1 := time.AfterFunc(2*time.Second, func() {
+			if err == nil && !readySent {
+				serverReady <- struct{}{}
+				readySent = true
+			}
+		})
+		defer timer1.Stop()
+
+		conn, err = listener.Accept()
 		if err != nil {
 			log.Printf("accept error:%v", err)
 			continue
 		}
 		go jsonrpc.ServeConn(conn)
+
 	}
-	return nil
+	return
 }
 
 //NewClient rpc client

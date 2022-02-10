@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 
 	"time"
@@ -11,20 +12,29 @@ import (
 	"github.com/ghjan/learngo/crawler_distributed/rpcsupport"
 )
 
-const urlUserProfilePage = "http://album.zhenai.com/u/108415017"
+const urlUserProfilePage = "http://localhost:8080/mock/album.zhenai.com/u/108415017"
 const index = "test1"
+const ItemSaverServerDefaultPort = 1234
 
 func TestItemSaver(t *testing.T) {
-	const host = ":1234"
-
+	serviceHost := fmt.Sprintf(":%d", ItemSaverServerDefaultPort)
 	// start ItemSaverServer
-	go serveRpc(host, index)
+	var (
+		serverReady = make(chan struct{})
+		err         error
+	)
+	go func() {
+		if err = serveRpc(serviceHost, index, serverReady); err != nil {
+			t.Errorf("failed, serveRpc error:%s", err.Error())
+		}
+	}()
+	<-serverReady
 	time.Sleep(time.Second)
-
 	// start ItemSaverClient
-	client, err := rpcsupport.NewClient(host)
+
+	client, err := rpcsupport.NewClient(serviceHost)
 	if err != nil {
-		panic(err)
+		t.Fatalf("failed, error:%s", err.Error())
 	}
 
 	// Call save
@@ -55,5 +65,6 @@ func TestItemSaver(t *testing.T) {
 	if err != nil || result != "ok" {
 		t.Errorf("result: %s; err: %s",
 			result, err)
+		t.Fail()
 	}
 }

@@ -5,7 +5,7 @@ import (
 
 	"github.com/ghjan/learngo/crawler/engine"
 	persistReal "github.com/ghjan/learngo/crawler/persist"
-	"gopkg.in/olivere/elastic.v5"
+	"github.com/olivere/elastic/v7"
 )
 
 type ItemSaverService struct {

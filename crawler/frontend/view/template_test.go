@@ -9,7 +9,7 @@ import (
 	common "github.com/ghjan/learngo/crawler/model"
 )
 
-const urlUserProfilePage = "http://album.zhenai.com/u/108415017"
+const urlUserProfilePage = "http://localhost:8080/mock/album.zhenai.com/u/108415017"
 
 func TestTemplate(t *testing.T) {
 	//template := template.Must(template.ParseFiles("template.html"))

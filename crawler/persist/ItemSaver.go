@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/ghjan/learngo/crawler/engine"
-	"gopkg.in/olivere/elastic.v5"
+	"github.com/olivere/elastic/v7"
 )
 
 func ItemSaver(index string) (chan engine.Item, error) {
@@ -28,14 +28,14 @@ func ItemSaver(index string) (chan engine.Item, error) {
 
 			err := Save(client, item, index)
 			if err != nil {
-				log.Print("Item Saver: error saving item %v:%v", item, err)
+				log.Printf("Item Saver: error saving item %v:%s\n", item, err.Error())
 			}
 		}
 	}()
 	return out, nil
 }
 
-func Save(client *elastic.Client, item engine.Item, index string) (error) {
+func Save(client *elastic.Client, item engine.Item, index string) error {
 
 	if item.Type == "" {
 		return errors.New("must supply Type")

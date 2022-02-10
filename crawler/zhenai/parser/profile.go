@@ -35,7 +35,7 @@ var carRe = regexp.MustCompile(
 	`<td><span class="label">是否购车：</span><span field="">([^<]+)</span></td>`)
 
 //var guessRe = regexp.MustCompile(
-//	`<a class="exp-user-name"[^>]*href="(http://album.zhenai.com/u/[\d]+)">([^<]+)</a>`)
+//	`<a class="exp-user-name"[^>]*href="(http://*.album\.zhenai\.com/u/[\d]+)">([^<]+)</a>`)
 var idUrlRe = regexp.MustCompile(
 	`http://.*album\.zhenai\.com/u/([\d]+)`)
 
@@ -110,7 +110,7 @@ type ProfileParser struct {
 }
 
 func (p *ProfileParser) Parse(contents []byte, url string) engine.ParseResult {
-	return parseProfile(contents, url, p.userName)
+	return parseProfile(contents, p.userName, url)
 }
 
 func (p *ProfileParser) Serialize() (name string, args interface{}) {

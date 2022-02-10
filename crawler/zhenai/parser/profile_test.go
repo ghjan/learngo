@@ -4,11 +4,11 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/ghjan/learngo/crawler/model"
 	"github.com/ghjan/learngo/crawler/engine"
+	"github.com/ghjan/learngo/crawler/model"
 )
 
-const urlUserProfilePage = "http://album.zhenai.com/u/108415017"
+const urlUserProfilePage = "http://localhost:8080/mock/album.zhenai.com/u/108415017"
 
 func TestParseProfile(t *testing.T) {
 	// contents, err := fetcher.Fetch(urlUserProfilePage)

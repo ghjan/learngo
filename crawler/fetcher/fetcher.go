@@ -8,14 +8,15 @@ import (
 
 	"fmt"
 
+	"github.com/ghjan/learngo/crawler/config"
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
 	"time"
-	"github.com/ghjan/learngo/crawler/config"
 )
 
+// 限流器
 var rateLimiter = time.Tick(time.Second / config.Qps)
 
 func Fetch(url string) ([]byte, error) {

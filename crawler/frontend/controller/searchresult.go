@@ -15,6 +15,10 @@ import (
 	"regexp"
 )
 
+// fill in query string
+// support search button
+// 转换 Age->Payload.Age rewriteQueryString
+
 type SearchResultHandler struct {
 	view   view.SearchResultView
 	client *elastic.Client
@@ -60,8 +64,9 @@ func (h SearchResultHandler) getSearchResult(
 	q string, from int) (model.SearchResult, error) {
 	var result model.SearchResult
 	result.Query = q
+	queryString := rewriteQueryString(q)
 	resp, err := h.client.Search("dating_profile").
-		Query(elastic.NewQueryStringQuery(rewriteQueryString(q))).
+		Query(elastic.NewQueryStringQuery(queryString)).
 		From(from).Do(context.Background())
 	if err != nil {
 		return result, err

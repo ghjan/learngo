@@ -60,6 +60,7 @@ func testConcurrentEngine() {
 		panic(err)
 	}
 
+	//使用连接池
 	pool, err := createClientPool(strings.Split(*workerHosts, ","))
 	if err != nil {
 		panic(err)

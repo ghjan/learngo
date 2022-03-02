@@ -94,6 +94,7 @@ func parseProfile(contents []byte, name string, url string) engine.ParseResult {
 
 }
 
+//extractString 获取某个字符串
 func extractString(contents []byte, re *regexp.Regexp) string {
 	match := re.FindSubmatch(contents)
 	if len(match) >= 2 {

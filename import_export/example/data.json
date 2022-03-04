@@ -1,0 +1,19 @@
+[
+  {
+    "id": "1",
+    "name": "golang",
+    "instructor": "ccmouse"
+  },
+  {
+    "id": "prsl3n4BpkOHcYGgb35k",
+    "name": "golang pipeline",
+    "instructor": "ccmouse",
+    "url": "https://www.imooc.com/learn/927"
+  },
+  {
+    "id": "2",
+    "name": "interview",
+    "instructor": "ccmouse",
+    "url": "https://coding.imooc.com/class/132.html"
+  }
+]

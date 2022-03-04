@@ -7,3 +7,4 @@ abc*.txt
 *.exe
 debug
 debug.test
+go.sum

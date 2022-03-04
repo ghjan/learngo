@@ -40,6 +40,7 @@ Gender:(女) AND Age:(<=30) AND Age:(>=16) AND Height:[150 TO 165] AND Weight:[4
 
 Gender:(男) AND 有房 AND 有车
 Gender:(男) AND House:(有房) AND Car:(有车)
+Gender:(男) AND Age:(<=40) AND Age:(>18) AND Height:(>180) AND House:(有房) AND Car:(有车) 
 
 ###es中文分词插件的安装
 /f/tmp/es/分词/中文分词.txt
@@ -50,3 +51,17 @@ standard对英语支持是最好的，
 ik_max_word比ik_smart对中文的支持更全面，但是存储上的开销实在太大，不建议使用。
 
 链接：https://www.jianshu.com/p/bb89ad7a7f7d
+
+#更新
+1 ch17:use local mock server instead of remote zhenai;
+
+http://album.zhenai.com
+-》
+http://localhost:8080/mock/album.zhenai.com
+
+cd /e/go-workspace/imooc_go/src/learngo
+
+go run mockserver/main.go
+
+2 use elastic v7;
+3 add a channel for serveRpc to send a signal of service ready;

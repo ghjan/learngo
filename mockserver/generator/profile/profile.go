@@ -9,9 +9,9 @@ import (
 	"math/rand"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/ghjan/learngo/crawler/model"
 	"github.com/ghjan/learngo/mockserver/config"
+	"github.com/gin-gonic/gin"
 )
 
 // Recommendation defines the interface for recommendation subsystem.
@@ -52,7 +52,7 @@ type GuessListItem struct {
 	PhotoURL string
 }
 
-// PhotoProfile defiens profile with photo bound into html template.
+// PhotoProfile defines profile with photo bound into html template.
 type PhotoProfile struct {
 	// Embed a *model.Profile here to save typing in template.
 	*model.Profile

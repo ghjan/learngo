@@ -29,6 +29,7 @@ func TestLikeDeletes(t *testing.T) {
 	err = LikeDeletes(patternPart)
 	assert.True(t, err == nil, fmt.Sprintf("LikeDeletes expected:err==nil,patternPart:%s", patternPart))
 }
+
 //
 //func TestMain(m *testing.M) {
 //	fmt.Println("begin")
